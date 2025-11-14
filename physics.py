@@ -1,24 +1,30 @@
 import math
+from dataclasses import dataclass
+from rocket import Rocket
 
-g = 9.81  # gravitational acceleration (m/s^2)
-RE = 6371000.0 # Earth's radius (m)
 
-rho0 = 1.2  # density at sea level (kg/m^3)
-k = -1.244268e-4  # exponential decay constant (1/m)
+@dataclass
+class Atmosphere:
+    """Class for calculating atmospheric properties based on altitude"""
+    rho0: float = 1.2        # density at sea level (kg/m^3)
+    k: float = -1.244268e-4  # exponential decay constant (1/m)
 
-def rho(h):
-    """
-    calculates the atmospheric density depending on altitude h using an exponential model
-    :param h: altitude (m)
-    :return: density at altitude h (kg/m^3)
-    """
-    return rho0 * math.exp(-k * h)
+    def atmospheric_density(self, h: float) -> float:
+        """calculates the atmospheric density (kg/m^3) depending on altitude h (m) using an exponential model"""
+        return self.rho0 * math.exp(self.k * max(h, 0.0))   # clamp h to be non-negative
 
-def dynamic_pressure(v, h):
-    """
-    calculates the dynamic pressure at altitude h for velocity v
-    :param v: velocity (m/s)
-    :param h: altitude (m)
-    :return: dynamic pressure (Pa)
-    """
-    return rho(h) * v ** 2 / 2
+    def dynamic_pressure(self, v: float, h: float) -> float:
+        """calculates the dynamic pressure (Pa) at altitude h (m) for velocity v (m/s)"""
+        return self.atmospheric_density(h) * v ** 2 / 2
+
+@dataclass
+class Physics:
+    """Class for various physics calculations related to rocket flight"""
+    rocket: Rocket
+
+    G: float = 6.67430e-11     # gravitational acceleration (m/s^2)
+    RE: float = 6371000.0      # Earth's radius (m)
+
+    def gravitational_acceleration(self, h: float) -> float:
+        """calculates the gravitational acceleration (m/s^2) at altitude h (m)"""
+        return self.G * self.rocket.mass / (self.RE + h) ** 2
