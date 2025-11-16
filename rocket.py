@@ -10,6 +10,7 @@ class Rocket:
     drag_coefficient: float
     lift_coefficient: float
     ballistic_coefficient: float
+    L_over_D: float
     initial_angle: float
     initial_altitude: float
     initial_velocity: float
@@ -23,8 +24,8 @@ class Rocket:
             data = json.load(f)
         return cls(**data)
 
-    def calculate_ballistic_coefficient(self) -> float:
-        """calculates the ballistic coefficient (kg/m^2) of the rocket"""
+    def compute_ballistic_coefficient(self) -> float:
+        """compute the ballistic coefficient (kg/m^2) of the rocket"""
         return self.mass / (self.drag_coefficient * self.reference_area)
 
     def get_ballistic_coefficient(self) -> float:
@@ -41,6 +42,10 @@ class Rocket:
 
     def compute_L_over_D(self, q: float) -> float:
         """Compute L/D from c_L and c_D."""
-        if self.drag_coefficient == 0:
-            return 0.0  # mathematisch sicherer fallback
+        if self.drag_coefficient == 0.0:
+            return self.aerodynamic_lift(q)  # mathematisch sicherer fallback
         return self.aerodynamic_lift(q) / self.aerodynamic_drag(q)
+
+    def get_L_over_D(self) -> float:
+        """Get L/D from input-file."""
+        return self.L_over_D

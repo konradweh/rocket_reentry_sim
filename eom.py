@@ -18,17 +18,17 @@ class EOM:
 
         q = self.atmos.dynamic_pressure(v, h)
         beta = self.rocket.get_ballistic_coefficient()
-        g = self.phys.gravitational_acceleration(h)
+        g = (self.phys.gravitational_acceleration(h))
 
-        LoverD = self.rocket.compute_L_over_D(q)
+        LoverD = self.rocket.get_L_over_D()
 
-        v_dot = - q / beta + g * math.sin(gamma)
+        v_dot = (- q / beta) + g * math.sin(gamma)
 
         gamma_dot = 1 / v * (
                 - q / beta * LoverD
                 + math.cos(gamma) * (g - v ** 2 / (self.phys.RE + h))
         )
 
-        h_dot = v * math.sin(gamma)
+        h_dot = - v * math.sin(gamma)
 
         return np.array([v_dot, gamma_dot, h_dot], dtype=float)

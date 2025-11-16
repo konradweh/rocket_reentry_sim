@@ -24,7 +24,8 @@ class Physics:
 
     G: float = 6.67430e-11     # gravitational acceleration (m/s^2)
     RE: float = 6371000.0      # Earth's radius (m)
+    ME: float = 5.9722e24      # Earth's mass (kg)
 
     def gravitational_acceleration(self, h: float) -> float:
         """calculates the gravitational acceleration (m/s^2) at altitude h (m)"""
-        return self.G * self.rocket.mass / (self.RE + h) ** 2
+        return self.G * self.ME / (self.RE + h) ** 2
