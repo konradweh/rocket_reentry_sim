@@ -1,7 +1,6 @@
 import json
 from dataclasses import dataclass
 
-
 @dataclass
 class Rocket:
     """Class for various rocket-related calculations"""

@@ -5,23 +5,26 @@ from scipy.integrate import solve_ivp
 from rocket import Rocket
 from physics import Atmosphere, Physics
 from eom import EOM
+from thermo import Thermo
+
 
 def event_ground(t:float, state: np.ndarray):
     v, gamma, h = state
-    return h   # wird 0, wenn Boden erreicht
+    return h   # becomes 0 at ground level
 
-event_ground.terminal = True      # Integration stoppen
-event_ground.direction = -1       # nur wenn h von oben nach unten durch 0 geht
+event_ground.terminal = True      # stops integration
+event_ground.direction = -1       # only trigger when h is decreasing
 
 def run_simulation(t_max: float = 1000.0,
                    max_step: float = 0.5,
                    rtol: float = 1e-8,
                    atol: float = 1e-9):
-    """    Runs the atmospheric entry simulation using solve_ivp and returns the solution object"""
+    """Runs the atmospheric entry simulation using solve_ivp and returns the solution object"""
 
     rocket = Rocket.import_data("input.json")
     atmos = Atmosphere()
     phys = Physics(rocket=rocket)
+    thermo = Thermo(rocket=rocket, atmos=atmos, phys=phys)
 
     eom = EOM(rocket=rocket, atmos=atmos, phys=phys)
 
@@ -33,12 +36,23 @@ def run_simulation(t_max: float = 1000.0,
 
     solution = solve_ivp(
         fun=eom.right_sides,   # RHS: (t, state)
-        t_span=(0, 100000),    # Integrationsintervall
-        y0=y0,                 # Anfangszustand
-        events=event_ground,  # Bei Erreichen des Bodes stoppen
+        t_span=(0, t_max),    # integration interval
+        y0=y0,                 # initial state
+        events=event_ground,   # event to stop at ground level
         max_step=max_step,
         rtol=rtol,
         atol=atol
     )
 
-    return solution
+    return solution, thermo
+
+
+def compute_thermal_histories(sol, thermo):
+    t = sol.t
+    v = sol.y[0]
+    h = sol.y[2]
+
+    q = np.array([thermo.sutton_graves_heat_flux(h_i, v_i) for h_i, v_i in zip(h, v)])
+    T_wall = np.array([thermo.adiabatic_wall_temperature_radiative(h_i, v_i) for h_i, v_i in zip(h, v)])
+
+    return t, q, T_wall

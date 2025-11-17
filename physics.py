@@ -2,7 +2,6 @@ import math
 from dataclasses import dataclass
 from rocket import Rocket
 
-
 @dataclass
 class Atmosphere:
     """Class for calculating atmospheric properties based on altitude"""
