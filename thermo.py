@@ -23,9 +23,9 @@ class Thermo:
 
         return heat_flux
 
-    def adiabatic_wall_temperature_radiative(self, h: float, u: float, T_atmos = 0.0) -> float:
+    def adiabatic_wall_temperature_radiative(self, h: float, u: float, T_atmos = -273.15) -> float:
         """Calculates the adiabatic wall temperature (K) assuming radiative equilibrium with the atmosphere,
-        neglecting atmospheric temperature"""
+        assuming a const atmospheric temperature of 0 °C"""
         T_wall = (self.sutton_graves_heat_flux(h, u) / (self.sigma * self.emissivity) + T_atmos ** 4) ** 0.25
 
         return T_wall

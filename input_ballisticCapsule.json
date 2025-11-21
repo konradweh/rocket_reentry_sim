@@ -1,0 +1,15 @@
+{
+    "mass": 216.0,
+    "reference_area": 1.2,
+    "drag_coefficient": 1.0,
+    "lift_coefficient": 1.0,
+    "ballistic_coefficient": 400.0,
+    "L_over_D": 0.0,
+
+    "initial_angle": 10.0,
+    "initial_altitude": 200000.0,
+    "initial_velocity": 7500.0,
+
+    "nose_radius": 1.0,
+    "emission_coefficient": 0.8
+}

@@ -41,8 +41,8 @@ class Rocket:
 
     def compute_L_over_D(self, q: float) -> float:
         """Compute L/D from c_L and c_D."""
-        if self.drag_coefficient == 0.0:
-            return self.aerodynamic_lift(q)  # mathematisch sicherer fallback
+        if self.aerodynamic_drag() == 0.0:
+            return 0.0  # mathematisch sicherer fallback
         return self.aerodynamic_lift(q) / self.aerodynamic_drag(q)
 
     def get_L_over_D(self) -> float:

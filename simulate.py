@@ -7,7 +7,6 @@ from physics import Atmosphere, Physics
 from eom import EOM
 from thermo import Thermo
 
-
 def event_ground(t:float, state: np.ndarray):
     v, gamma, h = state
     return h   # becomes 0 at ground level
@@ -15,13 +14,14 @@ def event_ground(t:float, state: np.ndarray):
 event_ground.terminal = True      # stops integration
 event_ground.direction = -1       # only trigger when h is decreasing
 
-def run_simulation(t_max: float = 1000.0,
+def run_simulation(input_file: str,
+                   t_max: float = 10000.0,
                    max_step: float = 0.5,
                    rtol: float = 1e-8,
                    atol: float = 1e-9):
     """Runs the atmospheric entry simulation using solve_ivp and returns the solution object"""
 
-    rocket = Rocket.import_data("input.json")
+    rocket = Rocket.import_data(input_file)
     atmos = Atmosphere()
     phys = Physics(rocket=rocket)
     thermo = Thermo(rocket=rocket, atmos=atmos, phys=phys)
@@ -44,7 +44,7 @@ def run_simulation(t_max: float = 1000.0,
         atol=atol
     )
 
-    return solution, thermo
+    return solution, thermo, rocket
 
 
 def compute_thermal_histories(sol, thermo):
