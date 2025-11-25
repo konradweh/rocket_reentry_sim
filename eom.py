@@ -12,6 +12,18 @@ class EOM:
     atmos: Atmosphere
     phys: Physics
 
+    @staticmethod
+    def control_gain(gamma: float) -> float:
+        """control law to avoid skip trajectories based on flight path angle gamma (radians)"""
+        gamma_deg = math.degrees(gamma)
+
+        if gamma_deg <= -5.0:
+            return 1.0
+        elif gamma_deg >= 0.0:
+            return 0.0
+        else:
+            return -gamma_deg / 5.0  # linear interpolation between 0 and 1
+
     def right_sides (self, t: float, state: np.ndarray) -> np.ndarray:
 
         v, gamma, h = state
@@ -20,7 +32,7 @@ class EOM:
         beta = self.rocket.get_ballistic_coefficient()
         g = (self.phys.gravitational_acceleration(h))
 
-        LoverD = self.rocket.get_L_over_D()
+        LoverD = self.control_gain(gamma) * self.rocket.get_L_over_D()  # effective L/D to avoid skip trajectories
 
         v_dot = (- q / beta) + g * math.sin(gamma)
 

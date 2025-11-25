@@ -7,7 +7,7 @@
     "L_over_D": 0.0,
 
     "initial_angle": 10.0,
-    "initial_altitude": 200000.0,
+    "initial_altitude": 100000.0,
     "initial_velocity": 7500.0,
 
     "nose_radius": 1.0,

@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib.gridspec as gridspec
 
 def plot_trajectory(x: np.ndarray, y: np.ndarray, title="trajectory"):
     altitude_in_km = y / 1000
@@ -51,3 +52,47 @@ def format_with_prefix(value: float, unit: str, decimals=3):
 
     scaled = value / best_factor
     return f"{scaled:.{decimals}f} {prefix}{unit}"
+
+
+def plot_combined(t, v, h, q_MW, T_wall):
+    # vorberechnen
+    altitude_km = h / 1000
+    velocity_km_s = v / 1000
+
+    fig = plt.figure(figsize=(14, 6), constrained_layout=True)
+    gs = gridspec.GridSpec(3, 2, figure=fig, width_ratios=[2.5, 1])
+
+    # --------------------------------------
+    # LEFT: big trajectory plot
+    # --------------------------------------
+    ax_big = fig.add_subplot(gs[:, 0])  # alle Zeilen, linke Spalte
+    ax_big.plot(velocity_km_s, altitude_km)
+    ax_big.set_title("Trajectory")
+    ax_big.set_xlabel("velocity (km/s)")
+    ax_big.set_ylabel("altitude (km)")
+
+    # --------------------------------------
+    # RIGHT: small plots (stacked)
+    # --------------------------------------
+    # 1. velocity over time
+    ax1 = fig.add_subplot(gs[0, 1])
+    ax1.plot(t, velocity_km_s)
+    ax1.set_title("velocity over time")
+    ax1.set_ylabel("velocity (km/s)")
+    ax1.tick_params(axis="x", which="both", bottom=True, labelbottom=False)
+
+    # 2. heat flux
+    ax2 = fig.add_subplot(gs[1, 1])
+    ax2.plot(t, q_MW)
+    ax2.set_title("Sutton–Graves heat flux")
+    ax2.set_ylabel("heat flux (MW/m²)")
+    ax2.tick_params(axis="x", which="both", bottom=True, labelbottom=False)
+
+    # 3. adiabatic wall temperature
+    ax3 = fig.add_subplot(gs[2, 1])
+    ax3.plot(t, T_wall)
+    ax3.set_title("adiabatic wall temperature")
+    ax3.set_xlabel("time (s)")
+    ax3.set_ylabel("temperature (K)")
+
+    plt.show()
