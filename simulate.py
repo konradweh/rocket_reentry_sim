@@ -14,18 +14,16 @@ def event_ground(t:float, state: np.ndarray):
 event_ground.terminal = True      # stops integration
 event_ground.direction = -1       # only trigger when h is decreasing
 
-def run_simulation(input_file: str,
+def run_simulation_from_rocket(rocket: Rocket,
                    t_max: float = 10000.0,
                    max_step: float = 0.5,
                    rtol: float = 1e-8,
                    atol: float = 1e-9):
     """Runs the atmospheric entry simulation using solve_ivp and returns the solution object"""
 
-    rocket = Rocket.import_data(input_file)
     atmos = Atmosphere()
     phys = Physics(rocket=rocket)
     thermo = Thermo(rocket=rocket, atmos=atmos, phys=phys)
-
     eom = EOM(rocket=rocket, atmos=atmos, phys=phys)
 
     v0 = rocket.initial_velocity
@@ -47,7 +45,25 @@ def run_simulation(input_file: str,
     return solution, thermo, rocket
 
 
+def run_simulation(input_file: str,
+                   t_max: float = 10000.0,
+                   max_step: float = 0.5,
+                   rtol: float = 1e-8,
+                   atol: float = 1e-9):
+    """Runs the atmospheric entry simulation using an input JSON file."""
+
+    rocket = Rocket.import_data(input_file)
+    return run_simulation_from_rocket(
+        rocket,
+        t_max=t_max,
+        max_step=max_step,
+        rtol=rtol,
+        atol=atol,
+    )
+
+
 def compute_thermal_histories(sol, thermo):
+    """computes the thermal histories (heat flux and wall temperature) over time from the solution object"""
     t = sol.t
     v = sol.y[0]
     h = sol.y[2]

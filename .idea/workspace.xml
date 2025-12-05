@@ -4,14 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="752720a8-8841-4f49-9bd4-cfc93505334d" name="Changes" comment="made some corrections, can now continue with tasks on lifting body">
-      <change afterPath="$PROJECT_DIR$/trajectory.py" afterDir="false" />
+    <list default="true" id="752720a8-8841-4f49-9bd4-cfc93505334d" name="Changes" comment="some beauty corrections">
+      <change afterPath="$PROJECT_DIR$/running_utils.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eom.py" beforeDir="false" afterPath="$PROJECT_DIR$/eom.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/input_ballisticCapsule.json" beforeDir="false" afterPath="$PROJECT_DIR$/input_ballisticCapsule.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/simulate.py" beforeDir="false" afterPath="$PROJECT_DIR$/simulate.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/plotting_utils.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,6 +51,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Python.main.executor": "Run",
+    "Python.plotting_utils.executor": "Run",
     "Python.simulate.executor": "Run",
     "Python.trajectory.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
@@ -60,6 +59,10 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "master",
     "last_opened_file_path": "C:/Users/kw/Documents/Uni/Grundlagen der Raumfahrt/rocket_reentry_sim",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "settings.editor.selected.configurable": "preferences.sourceCode",
     "vue.rearranger.settings.migration": "true"
@@ -68,6 +71,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
+        <option value="bundled-js-predefined-d6986cc7102b-3aa1da707db6-JavaScript-PY-252.27397.106" />
         <option value="bundled-python-sdk-4e2b1448bda8-9a97661f3031-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-252.27397.106" />
       </set>
     </attachedChunks>
@@ -81,6 +85,7 @@
       <option name="presentableId" value="Default" />
       <updated>1762337005526</updated>
       <workItem from="1762337006562" duration="16000" />
+      <workItem from="1764847167942" duration="15288000" />
     </task>
     <task id="LOCAL-00001" summary="starting the model">
       <option name="closed" value="true" />
@@ -122,8 +127,19 @@
       <option name="project" value="LOCAL" />
       <updated>1763747175608</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="some beauty corrections">
+      <option name="closed" value="true" />
+      <created>1764067057161</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1764067057161</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="starting the model" />
@@ -131,6 +147,11 @@
     <MESSAGE value="fixed error in h_dot and continued working on project structure" />
     <MESSAGE value="continued with the tasks, thermo calculation" />
     <MESSAGE value="made some corrections, can now continue with tasks on lifting body" />
-    <option name="LAST_COMMIT_MESSAGE" value="made some corrections, can now continue with tasks on lifting body" />
+    <MESSAGE value="some beauty corrections" />
+    <option name="LAST_COMMIT_MESSAGE" value="some beauty corrections" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/rocket_reentry_sim$main.coverage" NAME="main Coverage Results" MODIFIED="1764871701425" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/rocket_reentry_sim$plotting_utils.coverage" NAME="plotting_utils Coverage Results" MODIFIED="1764870490820" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
