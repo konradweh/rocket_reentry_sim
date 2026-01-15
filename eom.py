@@ -33,6 +33,7 @@ class EOM:
         g = (self.phys.gravitational_acceleration(h))
 
         LoverD = self.control_gain(gamma) * self.rocket.get_L_over_D()  # effective L/D to avoid skip trajectories
+        #LoverD = self.rocket.get_L_over_D()
 
         v_dot = (- q / beta) + g * math.sin(gamma)
 

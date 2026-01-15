@@ -5,19 +5,41 @@ from datetime import datetime
 from pathlib import Path
 import json
 
-from running_utils import run_model_and_heat_load
+from running_utils import run_model_and_heat_load, run_model_for_acceleration
+from simulate import run_simulation
 
 
-def plot_trajectory(x: np.ndarray, y: np.ndarray, title="trajectory"):
+import numpy as np
+import matplotlib.pyplot as plt
+
+def plot_trajectory(x: np.ndarray, y: np.ndarray, label: str = None):
     altitude_in_km = y / 1000
     velocity_in_km_s = x / 1000
+    plt.plot(velocity_in_km_s, altitude_in_km, label=label)
 
+def plot_both_trajectories(sweepingparams, title="trajectory comparison"):
     plt.figure(figsize=(10, 5))
-    plt.plot(velocity_in_km_s, altitude_in_km)
+
+    name_map = {
+        "input_ballisticCapsule.json": "ballistic capsule",
+        "input_liftingBody.json": "lifting body",
+    }
+
+    for param in sweepingparams:
+        sol, thermo, rocket = run_simulation(str(param))
+        v = sol.y[0]
+        h = sol.y[2]
+
+        param_name = name_map.get(str(param), str(param))
+        plot_trajectory(v, h, label=param_name)
+
     plt.title(title)
     plt.xlabel("velocity (km/s)")
     plt.ylabel("altitude (km)")
-    plt.grid(True)
+    plt.legend()
+    plt.grid(True, alpha=0.3)
+
+    save_figure(plt, title)
     plt.show()
 
 
@@ -124,6 +146,92 @@ def build_case_info_text(input_file: str, label: str) -> str:
     return text
 
 
+def plot_v_comparison():
+    """compares heat flux for different trajectory cases"""
+
+    cases = [
+        ("input_ballisticCapsule.json", "ballistic capsule"),
+        ("input_liftingBody.json", "lifting body"),
+    ]
+
+    fig, ax = plt.subplots(figsize=(8, 5))
+
+    for input_file, label in cases:
+        t, v, _, _ = run_model_and_heat_load(input_file)
+        ax.plot(t, v, label=label)
+
+    ax.set_title("velocity comparison")
+    ax.set_xlabel("time (s)")
+    ax.set_ylabel("velocity (m/s)")
+    ax.legend()
+    fig.tight_layout()
+
+    text_ballistic = build_case_info_text("input_ballisticCapsule.json", "ballistic capsule")
+    text_lifting = build_case_info_text("input_liftingBody.json", "lifting body")
+
+    ax.text(
+        0.98, 0.98, text_ballistic,
+        transform=ax.transAxes,
+        ha="right", va="top",
+        fontsize=9,
+        bbox=dict(boxstyle="round", facecolor="white", alpha=0.8)
+    )
+
+    ax.text(
+        0.98, 0.55, text_lifting,
+        transform=ax.transAxes,
+        ha="right", va="top",
+        fontsize=9,
+        bbox=dict(boxstyle="round", facecolor="white", alpha=0.8)
+    )
+
+    save_figure(fig, 'velocity_comparison')
+    plt.show()
+
+
+def plot_vdot_comparison():
+    """compares heat flux for different trajectory cases"""
+
+    cases = [
+        ("input_ballisticCapsule.json", "ballistic capsule"),
+        ("input_liftingBody.json", "lifting body"),
+    ]
+
+    fig, ax = plt.subplots(figsize=(8, 5))
+
+    for input_file, label in cases:
+        t, v_dot = run_model_for_acceleration(input_file)
+        ax.plot(t, v_dot, label=label)
+
+    ax.set_title("acceleration comparison")
+    ax.set_xlabel("time (s)")
+    ax.set_ylabel("acceleration (m/s^2)")
+    ax.legend()
+    fig.tight_layout()
+
+    text_ballistic = build_case_info_text("input_ballisticCapsule.json", "ballistic capsule")
+    text_lifting = build_case_info_text("input_liftingBody.json", "lifting body")
+
+    ax.text(
+        0.98, 0.98, text_ballistic,
+        transform=ax.transAxes,
+        ha="right", va="top",
+        fontsize=9,
+        bbox=dict(boxstyle="round", facecolor="white", alpha=0.8)
+    )
+
+    ax.text(
+        0.98, 0.55, text_lifting,
+        transform=ax.transAxes,
+        ha="right", va="top",
+        fontsize=9,
+        bbox=dict(boxstyle="round", facecolor="white", alpha=0.8)
+    )
+
+    save_figure(fig, 'acceleration_comparison')
+    plt.show()
+
+
 def plot_heat_flux_comparison():
     """compares heat flux for different trajectory cases"""
 
@@ -135,8 +243,8 @@ def plot_heat_flux_comparison():
     fig, ax = plt.subplots(figsize=(8, 5))
 
     for input_file, label in cases:
-        t, q, _, lbl = run_model_and_heat_load(input_file, label)
-        ax.plot(t, q, label=lbl)
+        t, _, q, _ = run_model_and_heat_load(input_file)
+        ax.plot(t, q, label=label)
 
     ax.set_title("heat flux comparison")
     ax.set_xlabel("time (s)")
@@ -178,8 +286,8 @@ def plot_wall_temp_comparison():
     fig, ax = plt.subplots(figsize=(8, 5))
 
     for input_file, label in cases:
-        t, _, T_wall, lbl = run_model_and_heat_load(input_file, label)
-        ax.plot(t, T_wall, label=lbl)
+        t, _, _, T_wall = run_model_and_heat_load(input_file)
+        ax.plot(t, T_wall, label=label)
 
     ax.set_title("wall temperature comparison")
     ax.set_xlabel("time (s)")
@@ -237,9 +345,9 @@ def plot_sweep(parameter: str, x: np.ndarray, q_max: list[float], q_int: list[fl
         gridspec_kw={'height_ratios': [1.2, 1]}
     )
 
-    color1 = "#0072B2"  # dark blue
-    color2 = "#D55E00"  # dark red
-    color3 = "#009E73"  # dark green
+    color1 = "#004B23"  # dark green
+    color2 = "#6A0DAD"  # dark yellow
+    color3 = "#003F5C"  # dark blue
 
     ax_top.plot(x, q_max, ".-", color=color1, label="peak heat flux")
     ax_top.set_ylabel("peak heat flux (MW/m²)", color=color1)

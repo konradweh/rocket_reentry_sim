@@ -3,10 +3,11 @@ import numpy as np
 from running_utils import compute_v_dot, sweep_parameter
 from simulate import run_simulation, compute_thermal_histories
 from plotting_utils import plot_trajectory, plot_parameter_over_time, format_with_prefix, plot_combined, \
-    plot_heat_flux_comparison, plot_wall_temp_comparison, plot_sweep
+    plot_heat_flux_comparison, plot_wall_temp_comparison, plot_sweep, plot_both_trajectories, plot_v_comparison, \
+    plot_vdot_comparison
 from trajectory import plot_movement
 
-sol, thermo, rocket = run_simulation("input_ballisticCapsule.json")
+sol, thermo, rocket = run_simulation("input_liftingBody.json")
 
 t = sol.t
 v = sol.y[0]
@@ -16,17 +17,25 @@ h = sol.y[2]
 print(f"duration: {sol.t[-1]:.3f} s")
 print(f"terminal velocity: {sol.y[0, -1]:.3f} m/s")
 
-#plot_trajectory(v, h)
+#sweepingparams = [
+#    "input_ballisticCapsule.json",
+#    "input_liftingBody.json"
+#]
+
+#plot_both_trajectories(sweepingparams, title="trajectory comparison")
+
+
+#plot_trajectory(v, h, 'trajectory - ballistic capsule')
 
 v_km = v / 1000
-#plot_parameter_over_time(t, v_km, "velocity", "velocity (km/s)")
+plot_parameter_over_time(t, v_km, "velocity", "velocity (km/s)")
 
 
 _, q, T_wall = compute_thermal_histories(sol, thermo)
 
 q_MW = q / 1e6
-#plot_parameter_over_time(t, q_MW, "Sutton–Graves heat flux", "heat flux (MW/m^2)")
-#plot_parameter_over_time(t, T_wall, "adiabatic wall temperature", "temperature (K)")
+plot_parameter_over_time(t, q_MW, "Sutton–Graves heat flux", "heat flux (MW/m^2)")
+plot_parameter_over_time(t, T_wall, "adiabatic wall temperature", "temperature (K)")
 
 q_max_MW = np.max(q_MW)
 print(f"maximal heat load: {q_max_MW:.3f} MW")
@@ -37,7 +46,7 @@ print(f"intergral heat load: {q_integral_formatted:.3f} MJ/m²")
 
 
 v_dot, v_dot_max = compute_v_dot(rocket, sol)
-#plot_parameter_over_time(t, v_dot, "acceleration", "acceleration (m/s²)")
+plot_parameter_over_time(t, v_dot, "acceleration", "acceleration (m/s²)")
 print(f"maximal acceleration: {v_dot_max:.3f} m/s²")
 
 
@@ -56,17 +65,19 @@ print(f"fraction absorbed by wall (eta) = {eta:.3f} %")
 #plot_combined(t, v, h, q_MW, T_wall)
 
 
-#plot_heat_flux_comparison()
-#plot_wall_temp_comparison()
+plot_heat_flux_comparison()
+plot_wall_temp_comparison()
+plot_v_comparison()
+plot_vdot_comparison()
 
 
-gamma_values = np.arange(0.1, 21, 0.1)  # in degrees
-beta_values = np.arange(5, 1001, 5)  # in kg/m²
+#gamma_values = np.arange(0.1, 21, 0.1)  # in degrees
+#beta_values = np.arange(5, 1001, 5)  # in kg/m²
 
-parameter, q_max, q_int, n_max = sweep_parameter(
-    parameter="ballistic_coefficient",
-    sweep_array=beta_values,
-    base_input_file="input_ballisticCapsule.json",
-)
+#parameter, q_max, q_int, n_max = sweep_parameter(
+#    parameter="initial_angle",
+#    sweep_array=gamma_values,
+#    base_input_file="input_ballisticCapsule.json",
+#)
 
-plot_sweep(parameter, beta_values, q_max, q_int, n_max, True, 400)
+#plot_sweep(parameter, gamma_values, q_max, q_int, n_max, True, 10)

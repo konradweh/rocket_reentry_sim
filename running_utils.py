@@ -8,17 +8,30 @@ from physics import Atmosphere, Physics
 from eom import EOM
 
 
-def run_model_and_heat_load(input_file: str, label: str):
+def run_model_and_heat_load(input_file: str):
     """runs a simulation of a verhicle and returns time and integrated heat load [MJ/m²]
     zurück."""
     sol, thermo, rocket = run_simulation(input_file)
 
     t = sol.t
+    v = sol.y[0]
     t_thermo, q, T_wall = compute_thermal_histories(sol, thermo)
 
     q_MW = q / 1e6
 
-    return t, q_MW, T_wall, label
+    return t, v, q_MW, T_wall
+
+
+def run_model_for_acceleration(input_file: str):
+    """runs a simulation of a verhicle and returns time and integrated heat load [MJ/m²]
+    zurück."""
+    sol, thermo, rocket = run_simulation(input_file)
+
+    t = sol.t
+
+    v_dot, v_dot_max = compute_v_dot(rocket, sol)
+
+    return t, v_dot
 
 
 def compute_v_dot(rocket, sol) -> tuple[ndarray, float]:
