@@ -8,14 +8,11 @@ import json
 from running_utils import run_model_and_heat_load, run_model_for_acceleration
 from simulate import run_simulation
 
-
-import numpy as np
-import matplotlib.pyplot as plt
-
 def plot_trajectory(x: np.ndarray, y: np.ndarray, label: str = None):
     altitude_in_km = y / 1000
     velocity_in_km_s = x / 1000
     plt.plot(velocity_in_km_s, altitude_in_km, label=label)
+
 
 def plot_both_trajectories(sweepingparams, title="trajectory comparison"):
     plt.figure(figsize=(10, 5))
