@@ -2,7 +2,7 @@ import math
 import numpy as np
 from scipy.integrate import solve_ivp
 
-from rocket import Rocket
+from vehicle import Vehicle
 from physics import Atmosphere, Physics
 from eom import EOM
 from thermo import Thermo
@@ -14,11 +14,11 @@ def event_ground(t:float, state: np.ndarray):
 event_ground.terminal = True      # stops integration
 event_ground.direction = -1       # only trigger when h is decreasing
 
-def run_simulation_from_rocket(rocket: Rocket,
-                   t_max: float = 10000.0,
-                   max_step: float = 0.5,
-                   rtol: float = 1e-8,
-                   atol: float = 1e-9):
+def run_simulation_from_rocket(rocket: Vehicle,
+                               t_max: float = 10000.0,
+                               max_step: float = 0.5,
+                               rtol: float = 1e-8,
+                               atol: float = 1e-9):
     """Runs the atmospheric entry simulation using solve_ivp and returns the solution object"""
 
     atmos = Atmosphere()
@@ -52,7 +52,7 @@ def run_simulation(input_file: str,
                    atol: float = 1e-9):
     """Runs the atmospheric entry simulation using an input JSON file."""
 
-    rocket = Rocket.import_data(input_file)
+    rocket = Vehicle.import_data(input_file)
     return run_simulation_from_rocket(
         rocket,
         t_max=t_max,

@@ -2,22 +2,22 @@ import json
 from dataclasses import dataclass
 
 @dataclass
-class Rocket:
-    """Class for various rocket-related calculations"""
-    mass: float
-    reference_area: float
-    drag_coefficient: float
-    lift_coefficient: float
-    ballistic_coefficient: float
-    L_over_D: float
-    initial_angle: float
-    initial_altitude: float
-    initial_velocity: float
-    nose_radius: float
-    emission_coefficient: float
+class Vehicle:
+    """Geometric and aerodynamic properties of a reentry vehicle."""
+    mass: float                  # [kg]
+    reference_area: float        # [m^2]
+    drag_coefficient: float      # [-]
+    lift_coefficient: float      # [-]
+    ballistic_coefficient: float # [kg/m^2] (must satisfy β = m / (Cd*A))
+    L_over_D: float              # [-] (constant approximation)
+    initial_angle: float         # [deg or rad – model dependent]
+    initial_altitude: float      # [m]
+    initial_velocity: float      # [m/s]
+    nose_radius: float           # [m]
+    emission_coefficient: float  # [-]
 
     @classmethod
-    def import_data(cls, file_path: str) -> "Rocket":
+    def import_data(cls, file_path: str) -> "Vehicle":
         """imports rocket data from a JSON file and returns a Rocket instance"""
         with open(file_path, "r", encoding="utf-8") as f:
             data = json.load(f)
@@ -41,7 +41,7 @@ class Rocket:
 
     def compute_L_over_D(self, q: float) -> float:
         """Compute L/D from c_L and c_D."""
-        if self.aerodynamic_drag() == 0.0:
+        if self.aerodynamic_drag(q) == 0.0:
             return 0.0
         return self.aerodynamic_lift(q) / self.aerodynamic_drag(q)
 

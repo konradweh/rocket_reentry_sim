@@ -2,13 +2,13 @@ import math
 import numpy as np
 from dataclasses import dataclass
 
-from rocket import Rocket
+from vehicle import Vehicle
 from physics import Physics, Atmosphere
 
 @dataclass
 class EOM:
     """Base class for equations of motion"""
-    rocket: Rocket
+    rocket: Vehicle
     atmos: Atmosphere
     phys: Physics
 
@@ -32,6 +32,7 @@ class EOM:
         beta = self.rocket.get_ballistic_coefficient()
         g = (self.phys.gravitational_acceleration(h))
 
+        # choose here to avoid or not avoid skip trajectories
         LoverD = self.control_gain(gamma) * self.rocket.get_L_over_D()  # effective L/D to avoid skip trajectories
         #LoverD = self.rocket.get_L_over_D()
 

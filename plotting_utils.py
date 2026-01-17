@@ -79,8 +79,7 @@ def format_with_prefix(value: float, unit: str, decimals=3):
     return f"{scaled:.{decimals}f} {prefix}{unit}"
 
 
-def plot_combined(t, v, h, q_MW, T_wall):
-    # vorberechnen
+def plot_combined(t, v, h, q_MW, T_wall, name: str):
     altitude_km = h / 1000
     velocity_km_s = v / 1000
 
@@ -120,6 +119,8 @@ def plot_combined(t, v, h, q_MW, T_wall):
     ax3.set_xlabel("time (s)")
     ax3.set_ylabel("temperature (K)")
 
+
+    save_figure(fig, 'combined_plot_' + name)
     plt.show()
 
 
@@ -147,8 +148,8 @@ def plot_v_comparison():
     """compares heat flux for different trajectory cases"""
 
     cases = [
-        ("input_ballisticCapsule.json", "ballistic capsule"),
-        ("input_liftingBody.json", "lifting body"),
+        ("inputs/input_ballisticCapsule.json", "ballistic capsule"),
+        ("inputs/input_liftingBody.json", "lifting body"),
     ]
 
     fig, ax = plt.subplots(figsize=(8, 5))
@@ -163,8 +164,8 @@ def plot_v_comparison():
     ax.legend()
     fig.tight_layout()
 
-    text_ballistic = build_case_info_text("input_ballisticCapsule.json", "ballistic capsule")
-    text_lifting = build_case_info_text("input_liftingBody.json", "lifting body")
+    text_ballistic = build_case_info_text("inputs/input_ballisticCapsule.json", "ballistic capsule")
+    text_lifting = build_case_info_text("inputs/input_liftingBody.json", "lifting body")
 
     ax.text(
         0.98, 0.98, text_ballistic,
@@ -190,8 +191,8 @@ def plot_vdot_comparison():
     """compares heat flux for different trajectory cases"""
 
     cases = [
-        ("input_ballisticCapsule.json", "ballistic capsule"),
-        ("input_liftingBody.json", "lifting body"),
+        ("inputs/input_ballisticCapsule.json", "ballistic capsule"),
+        ("inputs/input_liftingBody.json", "lifting body"),
     ]
 
     fig, ax = plt.subplots(figsize=(8, 5))
@@ -206,8 +207,8 @@ def plot_vdot_comparison():
     ax.legend()
     fig.tight_layout()
 
-    text_ballistic = build_case_info_text("input_ballisticCapsule.json", "ballistic capsule")
-    text_lifting = build_case_info_text("input_liftingBody.json", "lifting body")
+    text_ballistic = build_case_info_text("inputs/input_ballisticCapsule.json", "ballistic capsule")
+    text_lifting = build_case_info_text("inputs/input_liftingBody.json", "lifting body")
 
     ax.text(
         0.98, 0.98, text_ballistic,
@@ -233,8 +234,8 @@ def plot_heat_flux_comparison():
     """compares heat flux for different trajectory cases"""
 
     cases = [
-        ("input_ballisticCapsule.json", "ballistic capsule"),
-        ("input_liftingBody.json", "lifting body"),
+        ("inputs/input_ballisticCapsule.json", "ballistic capsule"),
+        ("inputs/input_liftingBody.json", "lifting body"),
     ]
 
     fig, ax = plt.subplots(figsize=(8, 5))
@@ -249,8 +250,8 @@ def plot_heat_flux_comparison():
     ax.legend()
     fig.tight_layout()
 
-    text_ballistic = build_case_info_text("input_ballisticCapsule.json", "ballistic capsule")
-    text_lifting = build_case_info_text("input_liftingBody.json", "lifting body")
+    text_ballistic = build_case_info_text("inputs/input_ballisticCapsule.json", "ballistic capsule")
+    text_lifting = build_case_info_text("inputs/input_liftingBody.json", "lifting body")
 
     ax.text(
         0.98, 0.98, text_ballistic,
@@ -276,8 +277,8 @@ def plot_wall_temp_comparison():
     """compares wall temperature for different trajectory cases"""
 
     cases = [
-        ("input_ballisticCapsule.json", "ballistic capsule"),
-        ("input_liftingBody.json", "lifting body"),
+        ("inputs/input_ballisticCapsule.json", "ballistic capsule"),
+        ("inputs/input_liftingBody.json", "lifting body"),
     ]
 
     fig, ax = plt.subplots(figsize=(8, 5))
@@ -292,8 +293,8 @@ def plot_wall_temp_comparison():
     ax.legend()
     fig.tight_layout()
 
-    text_ballistic = build_case_info_text("input_ballisticCapsule.json", "ballistic capsule")
-    text_lifting = build_case_info_text("input_liftingBody.json", "lifting body")
+    text_ballistic = build_case_info_text("inputs/input_ballisticCapsule.json", "ballistic capsule")
+    text_lifting = build_case_info_text("inputs/input_liftingBody.json", "lifting body")
 
     ax.text(
         0.98, 0.98, text_ballistic,

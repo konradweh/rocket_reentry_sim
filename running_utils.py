@@ -2,15 +2,15 @@ import numpy as np
 from numpy import ndarray
 import json
 
-from rocket import Rocket
+from vehicle import Vehicle
 from simulate import run_simulation, compute_thermal_histories, run_simulation_from_rocket
 from physics import Atmosphere, Physics
 from eom import EOM
 
 
 def run_model_and_heat_load(input_file: str):
-    """runs a simulation of a verhicle and returns time and integrated heat load [MJ/m²]
-    zurück."""
+    """runs a simulation of a verhicle and returns time ,velocity, integrated heat load [MJ/m²] and wall temperature
+    [K]."""
     sol, thermo, rocket = run_simulation(input_file)
 
     t = sol.t
@@ -23,8 +23,7 @@ def run_model_and_heat_load(input_file: str):
 
 
 def run_model_for_acceleration(input_file: str):
-    """runs a simulation of a verhicle and returns time and integrated heat load [MJ/m²]
-    zurück."""
+    """runs a simulation of a verhicle and returns time and integrated heat load [MJ/m²]."""
     sol, thermo, rocket = run_simulation(input_file)
 
     t = sol.t
@@ -80,7 +79,7 @@ def sweep_parameter(parameter: str, sweep_array: ndarray, base_input_file: str):
         config = dict(base_config)
         config[parameter] = value
 
-        rocket = Rocket(**config)
+        rocket = Vehicle(**config)
 
         sol, thermo, rocket = run_simulation_from_rocket(rocket)
 

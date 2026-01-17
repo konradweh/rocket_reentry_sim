@@ -21,14 +21,15 @@ from trajectory import plot_movement
 # ============================================================
 
 possible_files = [
-    "input_liftingBody.json",
-    "ballistic_capsule.json"
+    "inputs/input_liftingBody.json",
+    "inputs/input_ballisticCapsule.json"
 ]
 
-INPUT_FILE = "input_ballisticCapsule.json.json"
+# to select which input file to use, chosse from possible files and change here:
+INPUT_FILE = "inputs/input_ballisticCapsule.json"
 
 # Toggle individual plots
-PLOT_ALTITUDE_OVER_VELOCITY = True
+PLOT_ALTITUDE_OVER_VELOCITY = False
 PLOT_VELOCITY_OVER_TIME = False
 PLOT_HEAT_FLUX_OVER_TIME = False
 PLOT_WALL_TEMP_OVER_TIME = False
@@ -49,8 +50,8 @@ RUN_SWEEP = False
 # Run a single trajectory simulation and get:
 # - sol: ODE solution object (t and state history)
 # - thermo: thermal model parameters/settings
-# - rocket: vehicle model object (areas, coefficients, etc.)
-sol, thermo, rocket = run_simulation(INPUT_FILE)
+# - vehicle: vehicle model object (areas, coefficients, etc.)
+sol, thermo, vehicle = run_simulation(INPUT_FILE)
 
 t = sol.t
 v = sol.y[0]      # velocity [m/s]
@@ -91,7 +92,7 @@ print(f"integral heat load: {q_integral / 1e6:.3f} MJ/m²")
 
 # v_dot: acceleration history [m/s^2]
 # v_dot_max: maximum acceleration magnitude [m/s^2]
-v_dot, v_dot_max = compute_v_dot(rocket, sol)
+v_dot, v_dot_max = compute_v_dot(vehicle, sol)
 print(f"maximal acceleration: {v_dot_max:.3f} m/s²")
 
 
@@ -100,10 +101,10 @@ print(f"maximal acceleration: {v_dot_max:.3f} m/s²")
 # ============================================================
 
 # Total heat absorbed by wall (integrated heat load * reference area) [J]
-Q_wall = q_integral * rocket.reference_area
+Q_wall = q_integral * vehicle.reference_area
 
 # Calculate the vehicle's mass from given parameters
-m = rocket.get_ballistic_coefficient() * rocket.drag_coefficient * rocket.reference_area
+m = vehicle.get_ballistic_coefficient() * vehicle.drag_coefficient * vehicle.reference_area
 
 # Initial kinetic energy [J]
 E_kin = 0.5 * m * v[0] ** 2
@@ -137,7 +138,7 @@ if PLOT_MOVEMENT_ANIMATION:
     plot_movement(sol)
 
 if PLOT_COMBINED_FIGURE:
-    plot_combined(t, v, h, (q / 1e6), T_wall)
+    plot_combined(t, v, h, (q / 1e6), T_wall, 'ballisticCapsule' if 'ballisticCapsule' in INPUT_FILE else 'liftingBody')
 
 if PLOT_COMPARISONS:
     # Compare ballistic capsule and lifting body
@@ -161,7 +162,7 @@ if RUN_SWEEP:
     parameter, q_max, q_int, n_max = sweep_parameter(
         parameter="initial_angle",
         sweep_array=gamma_values,
-        base_input_file="input_ballisticCapsule.json",
+        base_input_file="INPUT_FILE",
     )
 
     plot_sweep(parameter, gamma_values, q_max, q_int, n_max, True, 10)

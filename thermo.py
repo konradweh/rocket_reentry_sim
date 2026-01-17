@@ -1,17 +1,17 @@
 import math
 from dataclasses import dataclass
 
-from rocket import Rocket
+from vehicle import Vehicle
 from physics import Physics, Atmosphere
 
 @dataclass
 class Thermo:
     """Thermal models for reentry: Sutton–Graves, radiative equilibrium, etc"""
-    rocket: Rocket
+    rocket: Vehicle
     atmos: Atmosphere
     phys: Physics
 
-    k_sg: float = 1.74e-4       # Sutton–Graves constant (kg^0.5/m)
+    k_sg: float = 1.74e-4       # Sutton–Graves constant for Earth reentry (SI units)
     sigma: float = 5.670374e-8  # Stefan-Boltzmann constant (W/m^2/K^4)
     emissivity: float = 0.8     # Emissivity of the vehicle surface
 
@@ -23,9 +23,8 @@ class Thermo:
 
         return heat_flux
 
-    def adiabatic_wall_temperature_radiative(self, h: float, u: float, T_atmos = -273.15) -> float:
-        """Calculates the adiabatic wall temperature (K) assuming radiative equilibrium with the atmosphere,
-        assuming a const atmospheric temperature of 0 °C"""
+    def adiabatic_wall_temperature_radiative(self, h: float, u: float, T_atmos = 273.15) -> float:
+        """Calculates the adiabatic wall temperature (K) assuming radiative equilibrium with a constant background temperature of 0 °C"""
         T_wall = (self.sutton_graves_heat_flux(h, u) / (self.sigma * self.emissivity) + T_atmos ** 4) ** 0.25
 
         return T_wall
