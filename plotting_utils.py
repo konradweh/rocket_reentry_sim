@@ -317,7 +317,7 @@ def plot_wall_temp_comparison():
 
 
 def save_figure(fig, name: str):
-    output_dir = Path(r"C:\Users\kw\Documents\Uni\Grundlagen der Raumfahrt\rocket_reentry_sim\plots")
+    output_dir = Path("plots")
     output_dir.mkdir(parents=True, exist_ok=True)
 
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")  # z.B. 20251203_153045
