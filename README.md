@@ -54,6 +54,15 @@ between heating, deceleration, and trajectory shaping.
 
 ---
 
+## Installation
+
+- python -m venv venv
+- source venv/bin/activate   # Linux / macOS
+- venv\Scripts\activate      # Windows
+- pip install -r requirements.txt
+
+---
+
 ## Project Structure
 
 ```text
@@ -67,12 +76,3 @@ between heating, deceleration, and trajectory shaping.
 ├── configs/            # JSON configuration files for vehicles and scenarios
 ├── plots/              # Generated plots
 └── requirements.txt
-
----
-
-## Installation
-
-- python -m venv venv
-- source venv/bin/activate   # Linux / macOS
-- venv\Scripts\activate      # Windows
-- pip install -r requirements.txt
